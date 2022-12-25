@@ -1,0 +1,97 @@
+body {
+	margin: auto;
+	cursor: default;
+}
+
+#exampleFormControlInput1 {
+	width: 500px;
+	display: inline-block;
+}
+
+#search {
+	display: inline-block;
+	color: darkslategray;
+	margin-left: 10px;
+}
+
+#search:hover {
+	background-color: rgb(144, 173, 246);
+	border-color: rgb(144, 173, 246);
+}
+
+.add-info {
+	float: right;
+	text-align: right;
+}
+
+.add-info p {
+	width: 100px;
+}
+.container {
+	width: 50%;
+	background: rgb(247, 248, 249);
+}
+
+.icon {
+	width: 80px;
+	height: 80px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.icon-small {
+	width: 50px;
+	height: 50px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.icon:hover {
+	opacity: 0.5;
+}
+
+.icon-small:hover {
+	opacity: 0.5;
+}
+
+.temperature {
+	display: inline-block;
+	min-width: 90px;
+}
+
+.current-city {
+	width: 85%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.current-weather {
+	width: 40%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.conditions {
+	text-align: left;
+}
+
+.forecast {
+	display: flex;
+	justify-content: space-between;
+}
+
+.forecast div {
+	text-align: center;
+}
+
+.degree {
+	font-size: 15px;
+	position: relative;
+	top: -15px;
+}
+
+.degree a {
+	text-decoration: none;
+	color: #37a6ff;
+	font-weight: 500;
+}
