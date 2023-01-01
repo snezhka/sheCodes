@@ -22,6 +22,8 @@ body {
 .add-info {
 	float: right;
 	text-align: right;
+	position: relative;
+	top: -35px;
 }
 
 .add-info p {
