@@ -32,11 +32,13 @@ body {
 	background: rgb(247, 248, 249);
 }
 
-.icon {
-	width: 80px;
-	height: 80px;
+#icon {
+	width: 120px;
+	height: 120px;
 	display: inline-block;
 	cursor: pointer;
+	position: relative;
+	top: -20px;
 }
 
 .icon-small {
@@ -54,6 +56,9 @@ body {
 	opacity: 0.5;
 }
 
+#icon:hover {
+	opacity: 0.5;
+}
 .temperature {
 	display: inline-block;
 	min-width: 90px;
@@ -88,14 +93,24 @@ body {
 	font-size: 15px;
 	position: relative;
 	top: -15px;
+	left: 5px;
 }
 
 .degree a {
 	text-decoration: none;
-	color: #37a6ff;
 	font-weight: 500;
 }
 
 #github {
 	text-align: center;
+}
+
+.active {
+	cursor: default;
+	color: #636465;
+}
+
+.active:hover {
+	text-decoration: none;
+	color: #636465;
 }

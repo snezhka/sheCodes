@@ -23,76 +23,111 @@ let months = [
 	"December",
 ];
 
-let apiKey = "7290e5cc29e74c82f07ec1f53deb5cd3";
+let apiKey = "ca15ao538b1b1403fb9fb4b9aaa0tf25";
 let units = "metric";
 let cityDefault = "Barcelona";
 
-let date = document.querySelector(".date");
-let day = document.querySelector(".day");
-let time = document.querySelector(".time");
+function showCurrentDateTime() {
+	let date = document.querySelector(".date");
+	let day = document.querySelector(".day");
+	let time = document.querySelector(".time");
 
-let now = new Date();
+	let now = new Date();
 
-date.innerHTML = `${months[now.getMonth()]}, ${now.getDate()}`;
-day.innerHTML = `${days[now.getDay()]}`;
-time.innerHTML = `${now.getHours()}:${now.getMinutes()}`;
+	date.innerHTML = `${months[now.getMonth()]}, ${now.getDate()}`;
+	day.innerHTML = `${days[now.getDay()]}`;
+	let minutes = now.getMinutes();
+	time.innerHTML = `${now.getHours()}:${
+		minutes < 10 ? `0${minutes}` : minutes
+	}`;
+}
 
-let city = document.querySelector("#city");
-city.innerHTML = `${cityDefault}`;
-let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityDefault}&appid=${apiKey}&units=${units}`;
-axios.get(apiUrl).then(function (response) {
-	console.log(response);
-	let temperature = Math.round(response.data.main.temp);
-	let desc = document.querySelector("#desc");
-	let temp = document.querySelector("#temp");
-	let precip = document.querySelector("#precipitation");
-	let humid = document.querySelector("#humidity");
-	let wind = document.querySelector("#wind");
-	temp.innerHTML = temperature;
-	desc.innerHTML = response.data.weather[0].main;
-	precip.innerHTML = response.rain ? response.rain["1h"] : 0;
-	humid.innerHTML = response.data.main.humidity;
-	wind.innerHTML = Math.round(response.data.wind.speed);
-});
-
-let button = document.querySelector("#search");
-button.addEventListener("click", showWeather);
-button.addEventListener("keypress", showWeather);
-function showWeather(event) {
-	event.preventDefault();
+function showDefaultCityTemperature() {
 	let city = document.querySelector("#city");
-	let search = document.querySelector("#exampleFormControlInput1");
-	let value = search.value ? search.value : "Barcelona";
-	city.innerHTML = `${value}`;
-	let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${search.value}&appid=${apiKey}&units=${units}`;
-
+	city.innerHTML = `${cityDefault}`;
+	let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${cityDefault}&key=${apiKey}&units=${units}`;
 	axios.get(apiUrl).then(function (response) {
-		let temperature = Math.round(response.data.main.temp);
 		console.log(response);
-		let city = document.querySelector("#city");
-		let cityVal = response.data.name;
-		let temp = document.querySelector("#temp");
+		celciusTemp = response.data.temperature.current;
+		let temperature = Math.round(celciusTemp);
 		let desc = document.querySelector("#desc");
+		let temp = document.querySelector("#temp");
 		let precip = document.querySelector("#precipitation");
 		let humid = document.querySelector("#humidity");
 		let wind = document.querySelector("#wind");
+		let icon = document.querySelector("#icon");
 		temp.innerHTML = temperature;
-		city.innerHTML = `${cityVal}`;
-		desc.innerHTML = response.data.weather[0].main;
-		precip.innerHTML = response.data.rain ? response.data.rain["1h"] : 0;
-		humid.innerHTML = response.data.main.humidity;
+		desc.innerHTML = response.data.condition.description;
+		precip.innerHTML = response.data.temperature.pressure;
+		humid.innerHTML = response.data.temperature.humidity;
 		wind.innerHTML = Math.round(response.data.wind.speed);
+		icon.setAttribute("src", response.data.condition.icon_url);
 	});
 }
 
-// let cel = document.querySelector("#cel");
-// let far = document.querySelector("#far");
-// let temp = document.querySelector("#temp");
-// far.addEventListener("click", function (event) {
-//   event.preventDefault();
-//   temp.innerHTML = 66;
-// });
-// cel.addEventListener("click", function (event) {
-//   event.preventDefault();
-//   temp.innerHTML = 19;
-// });
+function searchWeather() {
+	let button = document.querySelector("#search");
+	button.addEventListener("click", showWeather);
+	button.addEventListener("keypress", showWeather);
+
+	function showWeather(event) {
+		event.preventDefault();
+		let city = document.querySelector("#city");
+		let search = document.querySelector("#exampleFormControlInput1");
+		let value = search.value ? search.value : "Barcelona";
+		city.innerHTML = `${value}`;
+		let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${search.value}&key=${apiKey}&units=${units}`;
+		axios.get(apiUrl).then(function (response) {
+			celciusTemp = response.data.temperature.current;
+			let temperature = Math.round(celciusTemp);
+			console.log(response);
+			let city = document.querySelector("#city");
+			let cityVal = response.data.city;
+			let temp = document.querySelector("#temp");
+			let desc = document.querySelector("#desc");
+			let precip = document.querySelector("#precipitation");
+			let humid = document.querySelector("#humidity");
+			let wind = document.querySelector("#wind");
+			let icon = document.querySelector("#icon");
+			temp.innerHTML = temperature;
+			city.innerHTML = `${cityVal}`;
+			desc.innerHTML = response.data.condition.description;
+			precip.innerHTML = response.data.temperature.pressure;
+			humid.innerHTML = response.data.temperature.humidity;
+			wind.innerHTML = Math.round(response.data.wind.speed);
+			icon.setAttribute("src", response.data.condition.icon_url);
+		});
+	}
+}
+
+function showFarenheit() {
+	let far = document.querySelector("#far");
+	let cel = document.querySelector("#cel");
+	let temp = document.querySelector("#temp");
+	far.addEventListener("click", function (event) {
+		event.preventDefault();
+		let farTemp = (celciusTemp * 9) / 5 + 32;
+		temp.innerHTML = Math.round(farTemp);
+		far.classList.add("active");
+		cel.classList.remove("active");
+	});
+}
+
+function showCelcius() {
+	let far = document.querySelector("#far");
+	let cel = document.querySelector("#cel");
+	let temp = document.querySelector("#temp");
+	cel.addEventListener("click", function (event) {
+		event.preventDefault();
+		temp.innerHTML = Math.round(celciusTemp);
+		far.classList.remove("active");
+		cel.classList.add("active");
+	});
+}
+
+let celciusTemp = null;
+showCurrentDateTime();
+showDefaultCityTemperature();
+searchWeather();
+showFarenheit();
+showCelcius();
